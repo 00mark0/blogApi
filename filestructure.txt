@@ -1,0 +1,32 @@
+|-- admin
+|-- backend
+    |-- .env
+    |-- .gitignore
+    |-- config
+        |-- db.js
+    |-- controllers
+        |-- articleController.js
+        |-- commentController.js
+        |-- likeController.js
+        |-- passwordResetController.js
+        |-- userController.js
+    |-- middleware
+        |-- authMiddleware.js
+        |-- errorHandler.js
+    |-- models
+        |-- Article.js
+        |-- Comment.js
+        |-- Like.js
+        |-- User.js
+    |-- package-lock.json
+    |-- package.json
+    |-- routes
+        |-- articleRoutes.js
+        |-- commentRoutes.js
+        |-- likeRoutes.js
+        |-- passwordResetRoutes.js
+        |-- userRoutes.js
+    |-- scripts
+        |-- initDb.js
+    |-- server.js
+|-- frontend
