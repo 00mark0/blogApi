@@ -1,4 +1,17 @@
 |-- admin
+    |-- .eslintrc.cjs
+    |-- .gitignore
+    |-- index.html
+    |-- package-lock.json
+    |-- package.json
+    |-- postcss.config.js
+    |-- src
+        |-- App.css
+        |-- App.jsx
+        |-- index.css
+        |-- main.jsx
+    |-- tailwind.config.js
+    |-- vite.config.js
 |-- backend
     |-- .env
     |-- .gitignore
@@ -30,3 +43,16 @@
         |-- initDb.js
     |-- server.js
 |-- frontend
+    |-- .eslintrc.cjs
+    |-- .gitignore
+    |-- index.html
+    |-- package-lock.json
+    |-- package.json
+    |-- postcss.config.js
+    |-- src
+        |-- App.css
+        |-- App.jsx
+        |-- index.css
+        |-- main.jsx
+    |-- tailwind.config.js
+    |-- vite.config.js

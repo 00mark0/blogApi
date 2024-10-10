@@ -47,3 +47,58 @@ export const resetFailedAttempts = async (username) => {
     username,
   ]);
 };
+
+export const getAllUsers = async () => {
+  const result = await pool.query("SELECT * FROM users");
+  return result.rows;
+};
+
+export const deleteUserAdmin = async (id) => {
+  const deletedUsername = `deleted_${id}`;
+  const deletedEmail = `deleted_${id}@example.com`;
+  await pool.query(
+    "UPDATE users SET username = $1, email = $2, password = '', is_locked = true WHERE id = $3",
+    [deletedUsername, deletedEmail, id]
+  );
+};
+
+export const deleteOwnAccount = async (id) => {
+  // Decrement like and dislike counts on articles and comments
+  await pool.query(
+    `UPDATE articles SET like_count = like_count - 1 WHERE id IN (SELECT article_id FROM likes WHERE user_id = $1 AND is_like = true)`,
+    [id]
+  );
+  await pool.query(
+    `UPDATE articles SET dislike_count = dislike_count - 1 WHERE id IN (SELECT article_id FROM likes WHERE user_id = $1 AND is_like = false)`,
+    [id]
+  );
+  await pool.query(
+    `UPDATE comments SET like_count = like_count - 1 WHERE id IN (SELECT comment_id FROM likes WHERE user_id = $1 AND is_like = true)`,
+    [id]
+  );
+  await pool.query(
+    `UPDATE comments SET dislike_count = dislike_count - 1 WHERE id IN (SELECT comment_id FROM likes WHERE user_id = $1 AND is_like = false)`,
+    [id]
+  );
+
+  // Delete likes associated with the user's comments
+  await pool.query(
+    `DELETE FROM likes WHERE comment_id IN (SELECT id FROM comments WHERE user_id = $1)`,
+    [id]
+  );
+
+  // Delete likes and comments
+  await pool.query("DELETE FROM likes WHERE user_id = $1", [id]);
+  await pool.query("DELETE FROM comments WHERE user_id = $1", [id]);
+
+  // Delete user
+  await pool.query("DELETE FROM users WHERE id = $1", [id]);
+};
+
+export const updateUserDetails = async (id, newUsername, newEmail) => {
+  const result = await pool.query(
+    "UPDATE users SET username = $1, email = $2 WHERE id = $3 RETURNING *",
+    [newUsername, newEmail, id]
+  );
+  return result.rows[0];
+};

@@ -1,9 +1,14 @@
 import {
   createUser,
   findUserByUsername,
+  findUserByEmail,
   updateUserFailedAttempts,
   lockUserAccount,
   resetFailedAttempts,
+  getAllUsers,
+  deleteUserAdmin,
+  deleteOwnAccount,
+  updateUserDetails,
 } from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -37,6 +42,15 @@ export const registerUser = async (req, res) => {
   }
 
   try {
+    const existingUser = await findUserByUsername(username);
+    const existingEmail = await findUserByEmail(email);
+
+    if (existingUser || existingEmail) {
+      return res
+        .status(400)
+        .json({ error: "Username or email already exists" });
+    }
+
     const user = await createUser(username, password, email, isAdmin);
     res.status(201).json(user);
   } catch (error) {
@@ -50,12 +64,10 @@ export const loginUser = async (req, res) => {
   try {
     const user = await findUserByUsername(username);
 
-    if (user.is_locked) {
-      return res
-        .status(403)
-        .json({
-          error: "Account is locked due to multiple failed login attempts",
-        });
+    if (user.is_locked || user.username.startsWith("deleted_")) {
+      return res.status(403).json({
+        error: "Account is locked or has been deleted",
+      });
     }
 
     if (user && (await bcrypt.compare(password, user.password))) {
@@ -72,15 +84,67 @@ export const loginUser = async (req, res) => {
 
       if (failedAttempts >= 5) {
         await lockUserAccount(username);
-        return res
-          .status(403)
-          .json({
-            error: "Account is locked due to multiple failed login attempts",
-          });
+        return res.status(403).json({
+          error: "Account is locked due to multiple failed login attempts",
+        });
       }
 
       res.status(401).json({ error: "Invalid credentials" });
     }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getAllUsersList = async (req, res) => {
+  try {
+    const users = await getAllUsers();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await deleteUserAdmin(id);
+    res.json({ message: "User deleted" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const deleteOwnAccountController = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    await deleteOwnAccount(userId);
+    res.json({ message: "Your account has been deleted" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const updateUserDetailsController = async (req, res) => {
+  const userId = req.user.id;
+  const { newUsername, newEmail } = req.body;
+
+  try {
+    const existingUser = await findUserByUsername(newUsername);
+    const existingEmail = await findUserByEmail(newEmail);
+
+    if (existingUser && existingUser.id !== userId) {
+      return res.status(400).json({ error: "Username already exists" });
+    }
+
+    if (existingEmail && existingEmail.id !== userId) {
+      return res.status(400).json({ error: "Email already exists" });
+    }
+
+    const updatedUser = await updateUserDetails(userId, newUsername, newEmail);
+    res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
