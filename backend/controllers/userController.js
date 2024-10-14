@@ -9,6 +9,7 @@ import {
   deleteUserAdmin,
   deleteOwnAccount,
   updateUserDetails,
+  getUser,
 } from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -58,11 +59,15 @@ export const registerUser = async (req, res) => {
   }
 };
 
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res, isAdminLogin) => {
   const { username, password } = req.body;
 
   try {
     const user = await findUserByUsername(username);
+
+    if (!user) {
+      return res.status(400).json({ error: "Invalid credentials" });
+    }
 
     if (user.is_locked || user.username.startsWith("deleted_")) {
       return res.status(403).json({
@@ -70,15 +75,8 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-      await resetFailedAttempts(username);
-      const token = jwt.sign(
-        { id: user.id, isAdmin: user.is_admin },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
-      res.json({ token });
-    } else {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       const failedAttempts = user.failed_attempts + 1;
       await updateUserFailedAttempts(username, failedAttempts);
 
@@ -89,8 +87,23 @@ export const loginUser = async (req, res) => {
         });
       }
 
-      res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ error: "Invalid credentials" });
     }
+
+    await resetFailedAttempts(username);
+
+    // Check if the login attempt is for an admin
+    if (isAdminLogin && !user.is_admin) {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, isAdmin: user.is_admin },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({ token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -145,6 +158,20 @@ export const updateUserDetailsController = async (req, res) => {
 
     const updatedUser = await updateUserDetails(userId, newUsername, newEmail);
     res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getUserDetails = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await getUser(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

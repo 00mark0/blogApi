@@ -6,6 +6,7 @@ import {
   deleteUser,
   deleteOwnAccountController,
   updateUserDetailsController,
+  getUserDetails,
 } from "../controllers/userController.js";
 import { authenticateToken, isAdmin } from "../middleware/authMiddleware.js";
 
@@ -30,8 +31,11 @@ router.get("/admin", authenticateToken, isAdmin, (req, res) => {
   res.json({ message: "This is an admin-only route", user: req.user });
 });
 
+// Get user details
+router.get("/:id", authenticateToken, getUserDetails);
+
 // Admin login
-router.post("/admin/login", authenticateToken, isAdmin, loginUser);
+router.post("/admin/login", (req, res) => loginUser(req, res, true));
 
 router.get("/admin/users", authenticateToken, isAdmin, getAllUsersList);
 

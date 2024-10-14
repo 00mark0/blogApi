@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import userRoutes from "./routes/userRoutes.js";
 import passwordResetRoutes from "./routes/passwordResetRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
@@ -12,6 +13,8 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
+
+app.use(cors());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

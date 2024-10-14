@@ -102,3 +102,9 @@ export const updateUserDetails = async (id, newUsername, newEmail) => {
   );
   return result.rows[0];
 };
+
+// Get user by ID
+export const getUser = async (id) => {
+  const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+  return result.rows[0];
+};

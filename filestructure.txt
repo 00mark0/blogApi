@@ -8,8 +8,16 @@
     |-- src
         |-- App.css
         |-- App.jsx
+        |-- api
+            |-- axios.js
         |-- index.css
         |-- main.jsx
+        |-- pages
+            |-- AdminLogin.jsx
+            |-- Dashboard.jsx
+            |-- ManageArticles.jsx
+            |-- ManageComments.jsx
+            |-- ManageUsers.jsx
     |-- tailwind.config.js
     |-- vite.config.js
 |-- backend
