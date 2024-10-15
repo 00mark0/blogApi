@@ -44,7 +44,7 @@ const ManageUsers = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Manage Users</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Manage Users</h2>
       <input
         type="text"
         placeholder="Search users by username or ID"
@@ -55,17 +55,19 @@ const ManageUsers = () => {
       <table className="min-w-full bg-white">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b">Username</th>
-            <th className="py-2 px-4 border-b">Email</th>
-            <th className="py-2 px-4 border-b">Actions</th>
+            <th className="py-2 px-4 border-b text-center">Username</th>
+            <th className="py-2 px-4 border-b text-center">Email</th>
+            <th className="py-2 px-4 border-b text-center">Actions</th>
           </tr>
         </thead>
         <tbody>
           {filteredUsers.map((user) => (
             <tr key={user.id}>
-              <td className="py-2 px-4 border-b">{user.username}</td>
-              <td className="py-2 px-4 border-b">{user.email}</td>
-              <td className="py-2 px-4 border-b">
+              <td className="py-2 px-4 border-b text-center">
+                {user.username}
+              </td>
+              <td className="py-2 px-4 border-b text-center">{user.email}</td>
+              <td className="py-2 px-4 border-b text-center">
                 <button
                   className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
                   onClick={() => handleDelete(user.id)}

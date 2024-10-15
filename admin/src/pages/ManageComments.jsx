@@ -1,11 +1,12 @@
 // src/pages/ManageComments.jsx
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 
 const ManageComments = () => {
   const { articleId } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const { articleTitle } = location.state;
   const [comments, setComments] = useState([]);
   const [usernames, setUsernames] = useState({});
@@ -60,56 +61,133 @@ const ManageComments = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate("/admin/dashboard/articles");
+  };
+
   return (
     <div>
+      <div className="block sm:hidden p-4">
+        <button
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          onClick={handleBack}
+        >
+          Back to Articles
+        </button>
+      </div>
       <h2 className="text-2xl font-bold mb-6 text-center">
         Comments from article &apos;{articleTitle}&apos;
       </h2>
-      <table className="min-w-full bg-white">
-        <thead>
-          <tr>
-            <th className="py-2 px-4 border-b text-center">User ID</th>
-            <th className="py-2 px-4 border-b text-center">Username</th>
-            <th className="py-2 px-4 border-b text-center">Comment</th>
-            <th className="py-2 px-4 border-b text-center">Created At</th>
-            <th className="py-2 px-4 border-b text-center">Likes</th>
-            <th className="py-2 px-4 border-b text-center">Dislikes</th>
-            <th className="py-2 px-4 border-b text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+      {comments.length === 0 ? (
+        <div className="text-center py-10">
+          <h3 className="text-xl font-semibold text-gray-700">
+            No comments yet!
+          </h3>
+          <p className="text-gray-500 mt-2">
+            Be the first to share your thoughts on this article.
+          </p>
+          <div className="mt-4">
+            <svg
+              className="mx-auto h-16 w-16 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M21 12c0 4.418-3.582 8-8 8H7l-4 4V12c0-4.418 3.582-8 8-8h6c4.418 0 8 3.582 8 8z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+      ) : (
+        <div className="sm:hidden">
           {comments.map((comment) => (
-            <tr key={comment.id}>
-              <td className="py-2 px-4 border-b text-center">
+            <div key={comment.id} className="mb-4 p-4 border rounded bg-white">
+              <div className="mb-2">
+                <span className="font-semibold">User ID:</span>{" "}
                 {comment.user_id}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
+              </div>
+              <div className="mb-2">
+                <span className="font-semibold">Username:</span>{" "}
                 {usernames[comment.user_id] || "Loading..."}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
+              </div>
+              <div className="mb-2">
+                <span className="font-semibold">Comment:</span>{" "}
                 {comment.content}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
+              </div>
+              <div className="mb-2">
+                <span className="font-semibold">Created At:</span>{" "}
                 {new Date(comment.created_at).toLocaleString()}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
+              </div>
+              <div className="mb-2">
+                <span className="font-semibold">Likes:</span>{" "}
                 {comment.like_count}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
+              </div>
+              <div className="mb-2">
+                <span className="font-semibold">Dislikes:</span>{" "}
                 {comment.dislike_count}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                <button
-                  className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
-                  onClick={() => handleDelete(comment.id)}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
+              </div>
+              <button
+                className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 w-full"
+                onClick={() => handleDelete(comment.id)}
+              >
+                Delete
+              </button>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      )}
+      <div className="hidden sm:block">
+        <table className="min-w-full bg-white">
+          <thead>
+            <tr>
+              <th className="py-2 px-4 border-b text-center">User ID</th>
+              <th className="py-2 px-4 border-b text-center">Username</th>
+              <th className="py-2 px-4 border-b text-center">Comment</th>
+              <th className="py-2 px-4 border-b text-center">Created At</th>
+              <th className="py-2 px-4 border-b text-center">Likes</th>
+              <th className="py-2 px-4 border-b text-center">Dislikes</th>
+              <th className="py-2 px-4 border-b text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comments.map((comment) => (
+              <tr key={comment.id}>
+                <td className="py-2 px-4 border-b text-center">
+                  {comment.user_id}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {usernames[comment.user_id] || "Loading..."}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {comment.content}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {new Date(comment.created_at).toLocaleString()}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {comment.like_count}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {comment.dislike_count}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  <button
+                    className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+                    onClick={() => handleDelete(comment.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
