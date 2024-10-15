@@ -141,53 +141,55 @@ const ManageComments = () => {
           ))}
         </div>
       )}
-      <div className="hidden sm:block">
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border-b text-center">User ID</th>
-              <th className="py-2 px-4 border-b text-center">Username</th>
-              <th className="py-2 px-4 border-b text-center">Comment</th>
-              <th className="py-2 px-4 border-b text-center">Created At</th>
-              <th className="py-2 px-4 border-b text-center">Likes</th>
-              <th className="py-2 px-4 border-b text-center">Dislikes</th>
-              <th className="py-2 px-4 border-b text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {comments.map((comment) => (
-              <tr key={comment.id}>
-                <td className="py-2 px-4 border-b text-center">
-                  {comment.user_id}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  {usernames[comment.user_id] || "Loading..."}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  {comment.content}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  {new Date(comment.created_at).toLocaleString()}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  {comment.like_count}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  {comment.dislike_count}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  <button
-                    className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
-                    onClick={() => handleDelete(comment.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
+      {comments.length > 0 && (
+        <div className="hidden sm:block">
+          <table className="min-w-full bg-white">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b text-center">User ID</th>
+                <th className="py-2 px-4 border-b text-center">Username</th>
+                <th className="py-2 px-4 border-b text-center">Comment</th>
+                <th className="py-2 px-4 border-b text-center">Created At</th>
+                <th className="py-2 px-4 border-b text-center">Likes</th>
+                <th className="py-2 px-4 border-b text-center">Dislikes</th>
+                <th className="py-2 px-4 border-b text-center">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {comments.map((comment) => (
+                <tr key={comment.id}>
+                  <td className="py-2 px-4 border-b text-center">
+                    {comment.user_id}
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    {usernames[comment.user_id] || "Loading..."}
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    {comment.content}
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    {new Date(comment.created_at).toLocaleString()}
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    {comment.like_count}
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    {comment.dislike_count}
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    <button
+                      className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+                      onClick={() => handleDelete(comment.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
