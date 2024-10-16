@@ -59,7 +59,7 @@ export const registerUser = async (req, res) => {
   }
 };
 
-export const loginUser = async (req, res, isAdminLogin) => {
+export const loginUser = async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -92,18 +92,13 @@ export const loginUser = async (req, res, isAdminLogin) => {
 
     await resetFailedAttempts(username);
 
-    // Check if the login attempt is for an admin
-    if (isAdminLogin && !user.is_admin) {
-      return res.status(403).json({ error: "Access denied" });
-    }
-
     const token = jwt.sign(
       { id: user.id, isAdmin: user.is_admin },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    res.json({ token });
+    res.json({ token, user: { id: user.id, username: user.username } });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -172,6 +167,33 @@ export const getUserDetails = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
     res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const loginAdmin = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await findUserByUsername(username);
+
+    if (!user || !user.is_admin) {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, isAdmin: user.is_admin },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({ token, user: { id: user.id, username: user.username } });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -7,6 +7,7 @@ import {
   deleteOwnAccountController,
   updateUserDetailsController,
   getUserDetails,
+  loginAdmin,
 } from "../controllers/userController.js";
 import { authenticateToken, isAdmin } from "../middleware/authMiddleware.js";
 
@@ -35,7 +36,7 @@ router.get("/admin", authenticateToken, isAdmin, (req, res) => {
 router.get("/:id", authenticateToken, getUserDetails);
 
 // Admin login
-router.post("/admin/login", (req, res) => loginUser(req, res, true));
+router.post("/admin/login", loginAdmin);
 
 router.get("/admin/users", authenticateToken, isAdmin, getAllUsersList);
 

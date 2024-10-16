@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path"; // Import path module
 import userRoutes from "./routes/userRoutes.js";
 import passwordResetRoutes from "./routes/passwordResetRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
@@ -30,6 +31,15 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/likes", likeRoutes);
 
 app.use(errorHandler);
+
+// Serve static files from the React app
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+// The "catchall" handler: for any request that doesn't match one above, send back index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

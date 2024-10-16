@@ -60,7 +60,21 @@
     |-- src
         |-- App.css
         |-- App.jsx
+        |-- api
+            |-- axios.js
+        |-- components
+            |-- LoginPopup.jsx
+            |-- Navbar.jsx
         |-- index.css
         |-- main.jsx
+        |-- pages
+            |-- About.jsx
+            |-- ArticlePage.jsx
+            |-- Articles.jsx
+            |-- Home.jsx
+            |-- Login.jsx
+            |-- Profile.jsx
+            |-- Register.jsx
+            |-- ResetPassword.jsx
     |-- tailwind.config.js
     |-- vite.config.js
