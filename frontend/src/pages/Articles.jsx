@@ -44,25 +44,24 @@ const Articles = () => {
         placeholder="Search articles by title or ID"
         value={searchQuery}
         onChange={handleSearch}
-        className="mb-4 px-3 py-2 border rounded w-full"
+        className="mb-4 px-3 py-2 border rounded w-full text-gray-800"
       />
       <input
         type="date"
         value={dateFilter}
         onChange={handleDateFilter}
-        className="mb-4 px-3 py-2 border rounded w-full"
+        className="mb-4 px-3 py-2 border rounded text-gray-800"
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredArticles.map((article) => (
           <Link
             to={`/articles/${article.id}`}
             key={article.id}
-            className="block p-4 border rounded hover:bg-gray-100"
+            className="block p-4 border border-gray-300 rounded hover:bg-gray-100 hover:text-gray-950 transition ease duration-200"
           >
-            <h3 className="text-xl font-semibold">{article.title}</h3>
-            <p className="text-gray-600">
-              {article.content.substring(0, 100)}...
-            </p>
+            <h3 className="text-xl font-semibold text-center">
+              {article.title}
+            </h3>
           </Link>
         ))}
       </div>

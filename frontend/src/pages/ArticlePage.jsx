@@ -2,6 +2,8 @@ import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import axios from "../api/axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 
 const ArticlePage = ({ isLoggedIn, setShowLoginPopup }) => {
   const { id } = useParams();
@@ -246,69 +248,80 @@ const ArticlePage = ({ isLoggedIn, setShowLoginPopup }) => {
   };
 
   return (
-    <div className="p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
       {article && (
         <>
-          <h2 className="text-2xl font-bold mb-6">{article.title}</h2>
-          <p className="mb-4">{article.content}</p>
-          <p className="text-sm text-gray-600 mb-4">
-            By {usernames[article.user_id]} on{" "}
-            {new Date(article.created_at).toLocaleDateString()}
-          </p>
-          <div className="flex items-center space-x-4 mb-4">
+          <div className="max-w-2xl w-full">
+            <h2 className="text-3xl font-bold mb-6 text-center">
+              {article.title}
+            </h2>
+            <p className="mb-4 text-center">{article.content}</p>
+            <p className="text-sm text-gray-600 mb-4 text-center">
+              By {usernames[article.user_id]} on{" "}
+              {new Date(article.created_at).toLocaleDateString()}
+            </p>
+            <div className="flex justify-center items-center space-x-4 mb-4">
+              <button
+                onClick={handleLike}
+                className="flex items-center bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
+                disabled={articleLikeStatus === true}
+              >
+                <FontAwesomeIcon icon={faThumbsUp} className="mr-2" />
+                {article.like_count}
+              </button>
+              <button
+                onClick={handleDislike}
+                className="flex items-center bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+                disabled={articleLikeStatus === false}
+              >
+                <FontAwesomeIcon icon={faThumbsDown} className="mr-2" />
+                {article.dislike_count}
+              </button>
+            </div>
+            <h3 className="text-xl font-semibold mb-4 text-center">Comments</h3>
+            {comments.map((comment) => (
+              <div
+                key={comment.id}
+                className="mb-4 p-4 border rounded bg-white"
+              >
+                <p className="mb-2 text-gray-800">{comment.content}</p>
+                <p className="text-sm text-gray-600 mb-2">
+                  By {usernames[comment.user_id]} on{" "}
+                  {new Date(comment.created_at).toLocaleDateString()}
+                </p>
+                <div className="flex items-center space-x-4">
+                  <button
+                    onClick={() => handleCommentLike(comment.id)}
+                    className="flex items-center bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
+                    disabled={commentLikeStatuses[comment.id] === true}
+                  >
+                    <FontAwesomeIcon icon={faThumbsUp} className="mr-2" />
+                    {comment.like_count}
+                  </button>
+                  <button
+                    onClick={() => handleCommentDislike(comment.id)}
+                    className="flex items-center bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+                    disabled={commentLikeStatuses[comment.id] === false}
+                  >
+                    <FontAwesomeIcon icon={faThumbsDown} className="mr-2" />{" "}
+                    {comment.dislike_count}
+                  </button>
+                </div>
+              </div>
+            ))}
+            <textarea
+              className="w-full p-2 border rounded mb-4 text-gray-800"
+              placeholder="Add a comment..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            ></textarea>
             <button
-              onClick={handleLike}
-              className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
-              disabled={articleLikeStatus === true}
+              onClick={handlePostComment}
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
             >
-              Like ({article.like_count})
-            </button>
-            <button
-              onClick={handleDislike}
-              className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
-              disabled={articleLikeStatus === false}
-            >
-              Dislike ({article.dislike_count})
+              Post Comment
             </button>
           </div>
-          <h3 className="text-xl font-semibold mb-4">Comments</h3>
-          {comments.map((comment) => (
-            <div key={comment.id} className="mb-4 p-4 border rounded bg-white">
-              <p className="mb-2">{comment.content}</p>
-              <p className="text-sm text-gray-600 mb-2">
-                By {usernames[comment.user_id]} on{" "}
-                {new Date(comment.created_at).toLocaleDateString()}
-              </p>
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={() => handleCommentLike(comment.id)}
-                  className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
-                  disabled={commentLikeStatuses[comment.id] === true}
-                >
-                  Like ({comment.like_count})
-                </button>
-                <button
-                  onClick={() => handleCommentDislike(comment.id)}
-                  className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
-                  disabled={commentLikeStatuses[comment.id] === false}
-                >
-                  Dislike ({comment.dislike_count})
-                </button>
-              </div>
-            </div>
-          ))}
-          <textarea
-            className="w-full p-2 border rounded mb-4"
-            placeholder="Add a comment..."
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-          ></textarea>
-          <button
-            onClick={handlePostComment}
-            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-          >
-            Post Comment
-          </button>
         </>
       )}
     </div>

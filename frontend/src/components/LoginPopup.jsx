@@ -11,6 +11,7 @@ const LoginPopup = ({ onClose }) => {
         <div className="flex justify-between">
           <Link
             to="/login"
+            onClick={onClose}
             className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
           >
             Login

@@ -61,6 +61,7 @@ const Profile = ({ setIsLoggedIn }) => {
       localStorage.removeItem("userId");
       setIsLoggedIn(false);
       navigate("/register");
+      alert("Account deleted successfully");
     } catch (error) {
       console.error("Failed to delete user", error);
     }
@@ -92,41 +93,43 @@ const Profile = ({ setIsLoggedIn }) => {
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="mb-4 px-3 py-2 border rounded w-full"
+            className="mb-4 px-3 py-2 border rounded w-full text-gray-800"
           />
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mb-4 px-3 py-2 border rounded w-full"
+            className="mb-4 px-3 py-2 border rounded w-full text-gray-800"
           />
           <button
             type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full"
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
           >
             Update Details
           </button>
         </form>
       )}
-      <button
-        onClick={handlePasswordResetRequest}
-        className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 w-full mt-4"
-      >
-        Reset Password
-      </button>
-      <button
-        onClick={handleDelete}
-        className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 w-full mt-4"
-      >
-        Delete Account
-      </button>
-      <button
-        onClick={handleLogout}
-        className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 w-full mt-4"
-      >
-        Logout
-      </button>
+      <div className="flex flex-col mx-auto w-64 mt-12">
+        <button
+          onClick={handlePasswordResetRequest}
+          className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 mt-4"
+        >
+          Reset Password
+        </button>
+        <button
+          onClick={handleDelete}
+          className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mt-4"
+        >
+          Delete Account
+        </button>
+        <button
+          onClick={handleLogout}
+          className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 mt-4"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 };

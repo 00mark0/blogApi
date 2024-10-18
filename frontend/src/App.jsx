@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import LoginPopup from "./components/LoginPopup";
 import ResetPassword from "./pages/ResetPassword"; // Import the new ResetPassword page
+import "./App.css"; // Import the CSS file
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);

@@ -3,3 +3,31 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* styles.css */
+
+/* Light mode (default) */
+body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+nav a {
+  color: #000000;
+}
+
+/* Dark mode */
+.dark body {
+  background-color: #0d1b2a;
+  color: #ffffff;
+}
+
+/* Additional dark mode styles */
+
+.dark .text-white {
+  color: #ffffff;
+}
+
+.dark .hover\:underline:hover {
+  text-decoration: underline;
+}
