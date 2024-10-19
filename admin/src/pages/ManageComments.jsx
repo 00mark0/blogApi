@@ -1,5 +1,4 @@
-// src/pages/ManageComments.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 
@@ -10,6 +9,8 @@ const ManageComments = () => {
   const { articleTitle } = location.state;
   const [comments, setComments] = useState([]);
   const [usernames, setUsernames] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const userCache = useMemo(() => ({}), []);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -27,15 +28,19 @@ const ManageComments = () => {
 
     const fetchUsernames = async (userIds) => {
       try {
+        const uniqueUserIds = [...new Set(userIds)];
         const usernamesMap = {};
-        for (const userId of userIds) {
-          if (!usernames[userId]) {
+        for (const userId of uniqueUserIds) {
+          if (!userCache[userId]) {
             const response = await axios.get(`/users/${userId}`, {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
             });
+            userCache[userId] = response.data.username;
             usernamesMap[userId] = response.data.username;
+          } else {
+            usernamesMap[userId] = userCache[userId];
           }
         }
         setUsernames((prevUsernames) => ({
@@ -48,7 +53,7 @@ const ManageComments = () => {
     };
 
     fetchComments();
-  }, [usernames, articleId]);
+  }, [articleId, userCache]);
 
   const handleDelete = async (commentId) => {
     try {
@@ -65,6 +70,18 @@ const ManageComments = () => {
     navigate("/admin/dashboard/articles");
   };
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredComments = comments.filter((comment) => {
+    const username = usernames[comment.user_id] || "";
+    return (
+      comment.user_id.toString().includes(searchQuery) ||
+      username.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+
   return (
     <div>
       <div className="block sm:hidden p-4">
@@ -78,14 +95,18 @@ const ManageComments = () => {
       <h2 className="text-2xl font-bold mb-6 text-center">
         Comments from article &apos;{articleTitle}&apos;
       </h2>
-      {comments.length === 0 ? (
+      <input
+        type="text"
+        placeholder="Search by username or user ID"
+        value={searchQuery}
+        onChange={handleSearch}
+        className="mb-4 px-3 py-2 border rounded w-full text-gray-800"
+      />
+      {filteredComments.length === 0 ? (
         <div className="text-center py-10">
           <h3 className="text-xl font-semibold text-gray-700">
             No comments yet!
           </h3>
-          <p className="text-gray-500 mt-2">
-            Be the first to share your thoughts on this article.
-          </p>
           <div className="mt-4">
             <svg
               className="mx-auto h-16 w-16 text-gray-400"
@@ -105,7 +126,7 @@ const ManageComments = () => {
         </div>
       ) : (
         <div className="sm:hidden">
-          {comments.map((comment) => (
+          {filteredComments.map((comment) => (
             <div key={comment.id} className="mb-4 p-4 border rounded bg-white">
               <div className="mb-2">
                 <span className="font-semibold">User ID:</span>{" "}
@@ -141,7 +162,7 @@ const ManageComments = () => {
           ))}
         </div>
       )}
-      {comments.length > 0 && (
+      {filteredComments.length > 0 && (
         <div className="hidden sm:block">
           <table className="min-w-full bg-white">
             <thead>
@@ -156,7 +177,7 @@ const ManageComments = () => {
               </tr>
             </thead>
             <tbody>
-              {comments.map((comment) => (
+              {filteredComments.map((comment) => (
                 <tr key={comment.id}>
                   <td className="py-2 px-4 border-b text-center">
                     {comment.user_id}

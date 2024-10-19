@@ -34,9 +34,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen p-4">
-      <h2 className="text-3xl font-bold mb-6 mt-12 text-center">
-        Trending Articles
-      </h2>
+      <h2 className="text-3xl font-bold mb-6 mt-12 text-center">Most Liked</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
         {articles.map((article) => (
           <Link

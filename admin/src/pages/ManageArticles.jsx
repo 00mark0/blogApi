@@ -1,4 +1,3 @@
-// src/pages/ManageArticles.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
@@ -143,7 +142,13 @@ const ManageArticles = () => {
               <td className="py-2 px-4 border-b text-center">
                 {article.title}
                 {expandedArticleId === article.id && (
-                  <div className="mt-2 text-center">{article.content}</div>
+                  <div className="mt-2 text-center">
+                    <p>{article.content}</p>
+                    <p className="text-sm text-gray-600 mt-4">
+                      Created At:{" "}
+                      {new Date(article.created_at).toLocaleString()}
+                    </p>
+                  </div>
                 )}
               </td>
               <td className="py-2 px-4 border-b text-center">

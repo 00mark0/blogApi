@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = ({ toggleDarkMode, darkMode, isLoggedIn }) => {
   return (
@@ -18,7 +20,11 @@ const Navbar = ({ toggleDarkMode, darkMode, isLoggedIn }) => {
       </div>
       <div className="flex items-center space-x-4">
         <button onClick={toggleDarkMode} className="text-white">
-          {darkMode ? "🌙" : "☀️"}
+          {darkMode ? (
+            <FontAwesomeIcon icon={faSun} />
+          ) : (
+            <FontAwesomeIcon icon={faMoon} />
+          )}
         </button>
         {isLoggedIn ? (
           <Link to="/profile" className="text-white hover:underline">

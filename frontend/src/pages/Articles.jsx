@@ -1,7 +1,7 @@
-// src/pages/Articles.jsx
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import { Link } from "react-router-dom";
+import { parseISO, isSameDay } from "date-fns";
 
 const Articles = () => {
   const [articles, setArticles] = useState([]);
@@ -29,12 +29,18 @@ const Articles = () => {
     setDateFilter(e.target.value);
   };
 
-  const filteredArticles = articles.filter(
-    (article) =>
+  const filteredArticles = articles.filter((article) => {
+    const articleDate = parseISO(article.created_at); // Ensure the correct field name
+    const filterDate = dateFilter ? parseISO(dateFilter) : null;
+
+    console.log(`Article Date: ${articleDate}, Filter Date: ${filterDate}`);
+
+    return (
       (article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         article.id.toString().includes(searchQuery)) &&
-      (!dateFilter || new Date(article.createdAt) >= new Date(dateFilter))
-  );
+      (!filterDate || isSameDay(articleDate, filterDate))
+    );
+  });
 
   return (
     <div className="p-4">

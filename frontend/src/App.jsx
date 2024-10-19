@@ -13,15 +13,15 @@ import ResetPassword from "./pages/ResetPassword"; // Import the new ResetPasswo
 import "./App.css"; // Import the CSS file
 
 const App = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  // Initialize darkMode state from localStorage
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem("darkMode");
+    return savedMode ? JSON.parse(savedMode) : false;
+  });
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const savedMode = localStorage.getItem("darkMode");
-    if (savedMode) {
-      setDarkMode(JSON.parse(savedMode));
-    }
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);

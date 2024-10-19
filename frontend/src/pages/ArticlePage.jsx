@@ -63,7 +63,15 @@ const ArticlePage = ({ isLoggedIn, setShowLoginPopup }) => {
             [userId]: response.data.username,
           }));
         } catch (error) {
-          console.error("Failed to fetch user details", error);
+          if (error.response && error.response.status === 400) {
+            userCache[userId] = "Anonymous";
+            setUsernames((prevUsernames) => ({
+              ...prevUsernames,
+              [userId]: "Anonymous",
+            }));
+          } else {
+            console.error("Failed to fetch user details", error);
+          }
         }
       }
     };
@@ -230,6 +238,11 @@ const ArticlePage = ({ isLoggedIn, setShowLoginPopup }) => {
       setShowLoginPopup(true);
       return;
     }
+
+    if (newComment.trim() === "") {
+      return;
+    }
+
     try {
       const response = await axios.post(
         `/comments/${id}`,
@@ -256,7 +269,7 @@ const ArticlePage = ({ isLoggedIn, setShowLoginPopup }) => {
               {article.title}
             </h2>
             <p className="mb-4 text-center">{article.content}</p>
-            <p className="text-sm text-gray-600 mb-4 text-center">
+            <p className="text-sm text-gray-400 mb-4 text-center">
               By {usernames[article.user_id]} on{" "}
               {new Date(article.created_at).toLocaleDateString()}
             </p>
@@ -278,39 +291,66 @@ const ArticlePage = ({ isLoggedIn, setShowLoginPopup }) => {
                 {article.dislike_count}
               </button>
             </div>
-            <h3 className="text-xl font-semibold mb-4 text-center">Comments</h3>
-            {comments.map((comment) => (
-              <div
-                key={comment.id}
-                className="mb-4 p-4 border rounded bg-white"
-              >
-                <p className="mb-2 text-gray-800">{comment.content}</p>
-                <p className="text-sm text-gray-600 mb-2">
-                  By {usernames[comment.user_id]} on{" "}
-                  {new Date(comment.created_at).toLocaleDateString()}
+            <h3 className="text-xl font-semibold mb-4 text-start">Comments</h3>
+            {comments.length === 0 ? (
+              <div className="text-center py-10">
+                <h3 className="text-xl font-semibold text-gray-700">
+                  No comments yet!
+                </h3>
+                <p className="text-gray-500 mt-2">
+                  Be the first to share your thoughts on this article.
                 </p>
-                <div className="flex items-center space-x-4">
-                  <button
-                    onClick={() => handleCommentLike(comment.id)}
-                    className="flex items-center bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
-                    disabled={commentLikeStatuses[comment.id] === true}
+                <div className="mt-4">
+                  <svg
+                    className="mx-auto h-16 w-16 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <FontAwesomeIcon icon={faThumbsUp} className="mr-2" />
-                    {comment.like_count}
-                  </button>
-                  <button
-                    onClick={() => handleCommentDislike(comment.id)}
-                    className="flex items-center bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
-                    disabled={commentLikeStatuses[comment.id] === false}
-                  >
-                    <FontAwesomeIcon icon={faThumbsDown} className="mr-2" />{" "}
-                    {comment.dislike_count}
-                  </button>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M21 12c0 4.418-3.582 8-8 8H7l-4 4V12c0-4.418 3.582-8 8-8h6c4.418 0 8 3.582 8 8z"
+                    ></path>
+                  </svg>
                 </div>
               </div>
-            ))}
+            ) : (
+              comments.map((comment) => (
+                <div
+                  key={comment.id}
+                  className="mb-4 p-4 border rounded bg-blue-100"
+                >
+                  <p className="mb-2 text-gray-800">{comment.content}</p>
+                  <p className="text-sm text-gray-600 mb-2">
+                    By {usernames[comment.user_id]} on{" "}
+                    {new Date(comment.created_at).toLocaleDateString()}
+                  </p>
+                  <div className="flex items-center space-x-4">
+                    <button
+                      onClick={() => handleCommentLike(comment.id)}
+                      className="flex items-center bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
+                      disabled={commentLikeStatuses[comment.id] === true}
+                    >
+                      <FontAwesomeIcon icon={faThumbsUp} className="mr-2" />
+                      {comment.like_count}
+                    </button>
+                    <button
+                      onClick={() => handleCommentDislike(comment.id)}
+                      className="flex items-center bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+                      disabled={commentLikeStatuses[comment.id] === false}
+                    >
+                      <FontAwesomeIcon icon={faThumbsDown} className="mr-2" />{" "}
+                      {comment.dislike_count}
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
             <textarea
-              className="w-full p-2 border rounded mb-4 text-gray-800"
+              className="w-full p-2 border rounded mb-4 text-gray-800 bg-blue-100"
               placeholder="Add a comment..."
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
