@@ -5,6 +5,7 @@ import {
   deleteComment,
   getCommentById,
 } from "../models/Comment.js";
+import { deleteLikesByCommentId } from "../models/Like.js";
 
 // Create new comment (articleId from path, userId from JWT)
 export const createNewComment = async (req, res) => {
@@ -64,9 +65,12 @@ export const deleteExistingCommentAdmin = async (req, res) => {
   const { id } = req.params;
 
   try {
+    await deleteLikesByCommentId(id);
+
     await deleteComment(id);
     res.status(204).send();
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };

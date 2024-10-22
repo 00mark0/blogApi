@@ -67,3 +67,11 @@ export const likeComment = async (userId, commentId, isLike) => {
     client.release();
   }
 };
+
+export const deleteLikesByArticleId = async (articleId) => {
+  await pool.query("DELETE FROM likes WHERE article_id = $1", [articleId]);
+};
+
+export const deleteLikesByCommentId = async (commentId) => {
+  await pool.query("DELETE FROM likes WHERE comment_id = $1", [commentId]);
+};

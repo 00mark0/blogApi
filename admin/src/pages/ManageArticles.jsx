@@ -14,7 +14,9 @@ const ManageArticles = () => {
     const fetchArticles = async () => {
       try {
         const response = await axios.get("/articles", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
         setArticles(response.data);
       } catch (error) {
@@ -30,7 +32,9 @@ const ManageArticles = () => {
     try {
       if (editingArticleId) {
         await axios.put(`/articles/${editingArticleId}`, newArticle, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
         setArticles(
           articles.map((article) =>
@@ -41,7 +45,9 @@ const ManageArticles = () => {
         );
       } else {
         const response = await axios.post("/articles", newArticle, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
         setArticles([...articles, response.data]);
       }
@@ -55,7 +61,9 @@ const ManageArticles = () => {
   const handleDelete = async (articleId) => {
     try {
       await axios.delete(`/articles/${articleId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
       setArticles(articles.filter((article) => article.id !== articleId));
     } catch (error) {
