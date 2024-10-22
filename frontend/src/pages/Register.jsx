@@ -1,4 +1,3 @@
-// src/pages/Register.jsx
 import { useState } from "react";
 import axios from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -8,10 +7,12 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(""); // State to manage error messages
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError(""); // Clear previous error messages
     try {
       await axios.post("/users/register", {
         username,
@@ -21,13 +22,18 @@ const Register = () => {
       });
       navigate("/login");
     } catch (error) {
-      console.error("Failed to register", error);
+      if (error.response && error.response.data && error.response.data.error) {
+        setError(error.response.data.error); // Set error message from server response
+      } else {
+        setError("Failed to register. Please try again."); // Fallback error message
+      }
     }
   };
 
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+      {error && <div className="mb-4 text-red-500 text-center">{error}</div>}
       <form onSubmit={handleRegister} className="max-w-md mx-auto">
         <input
           type="text"

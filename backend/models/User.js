@@ -49,17 +49,14 @@ export const resetFailedAttempts = async (username) => {
 };
 
 export const getAllUsers = async () => {
-  const result = await pool.query("SELECT * FROM users");
+  const result = await pool.query(
+    "SELECT * FROM users WHERE is_locked = false"
+  );
   return result.rows;
 };
 
 export const deleteUserAdmin = async (id) => {
-  const deletedUsername = `deleted_${id}`;
-  const deletedEmail = `deleted_${id}@example.com`;
-  await pool.query(
-    "UPDATE users SET username = $1, email = $2, password = '', is_locked = true WHERE id = $3",
-    [deletedUsername, deletedEmail, id]
-  );
+  await pool.query("UPDATE users SET is_locked = true WHERE id = $1", [id]);
 };
 
 export const deleteOwnAccount = async (id) => {

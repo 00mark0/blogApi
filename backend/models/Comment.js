@@ -32,3 +32,11 @@ export const getCommentById = async (id) => {
   const result = await pool.query("SELECT * FROM comments WHERE id = $1", [id]);
   return result.rows[0];
 };
+
+export const getCommentsByUserId = async (userId) => {
+  const result = await pool.query(
+    "SELECT comments.*, articles.title as article_title FROM comments JOIN articles ON comments.article_id = articles.id WHERE comments.user_id = $1",
+    [userId]
+  );
+  return result.rows;
+};

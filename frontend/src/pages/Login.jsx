@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import { useState } from "react";
 import axios from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -7,10 +6,12 @@ import PropTypes from "prop-types";
 const Login = ({ setIsLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // State to manage error messages
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError(""); // Clear previous error messages
     try {
       const response = await axios.post("/users/login", {
         username,
@@ -21,13 +22,18 @@ const Login = ({ setIsLoggedIn }) => {
       setIsLoggedIn(true);
       navigate("/");
     } catch (error) {
-      console.error("Failed to login", error);
+      if (error.response && error.response.data && error.response.data.error) {
+        setError(error.response.data.error); // Set error message from server response
+      } else {
+        setError("Failed to login. Please try again."); // Fallback error message
+      }
     }
   };
 
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+      {error && <div className="mb-4 text-red-500 text-center">{error}</div>}
       <form onSubmit={handleLogin} className="max-w-md mx-auto">
         <input
           type="text"

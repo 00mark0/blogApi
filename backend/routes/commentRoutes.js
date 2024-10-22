@@ -5,6 +5,7 @@ import {
   updateExistingComment,
   deleteExistingComment,
   deleteExistingCommentAdmin,
+  getCommentsOfUser,
 } from "../controllers/commentController.js";
 import { authenticateToken, isAdmin } from "../middleware/authMiddleware.js";
 
@@ -15,6 +16,9 @@ router.post("/:articleId", authenticateToken, createNewComment);
 
 // GET comments for a specific article
 router.get("/:articleId", getComments);
+
+// GET comments for a specific user
+router.get("/user/:userId", getCommentsOfUser);
 
 // PUT (update) a comment by comment id
 router.put("/:id", authenticateToken, updateExistingComment);

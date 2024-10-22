@@ -39,7 +39,10 @@ export const registerUser = async (req, res) => {
   if (!validatePassword(password)) {
     return res
       .status(400)
-      .json({ error: "Password does not meet complexity requirements" });
+      .json({
+        error:
+          "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.",
+      });
   }
 
   try {

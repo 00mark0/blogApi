@@ -4,6 +4,7 @@ import {
   updateComment,
   deleteComment,
   getCommentById,
+  getCommentsByUserId,
 } from "../models/Comment.js";
 import { deleteLikesByCommentId } from "../models/Like.js";
 
@@ -80,6 +81,8 @@ export const deleteExistingComment = async (req, res) => {
   const userId = req.user.id; // Extract userId from the JWT token
 
   try {
+    await deleteLikesByCommentId(id);
+
     const comment = await getCommentById(id);
     if (!comment) {
       return res.status(404).json({ error: "Comment not found" });
@@ -95,6 +98,19 @@ export const deleteExistingComment = async (req, res) => {
     await deleteComment(id);
     res.status(204).send();
   } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getCommentsOfUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const comments = await getCommentsByUserId(parseInt(userId, 10));
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
