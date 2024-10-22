@@ -34,18 +34,18 @@ const Login = ({ setIsLoggedIn }) => {
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="mb-4 px-3 py-2 border rounded w-full"
+          className="mb-4 px-3 py-2 border rounded w-full text-gray-800"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mb-4 px-3 py-2 border rounded w-full"
+          className="mb-4 px-3 py-2 border rounded w-full text-gray-800"
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full"
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
         >
           Login
         </button>

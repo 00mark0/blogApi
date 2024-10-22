@@ -23,7 +23,7 @@ const ManageUsers = () => {
 
   const handleDelete = async (userId) => {
     try {
-      await axios.delete(`/admin/users/${userId}`, {
+      await axios.delete(`users/admin/users/${userId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setUsers(users.filter((user) => user.id !== userId));

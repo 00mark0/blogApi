@@ -53,8 +53,7 @@ const Profile = ({ setIsLoggedIn }) => {
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
-      await axios.delete(`/users/${userId}`, {
+      await axios.delete(`/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       localStorage.removeItem("token");
@@ -135,7 +134,6 @@ const Profile = ({ setIsLoggedIn }) => {
 };
 
 Profile.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
   setIsLoggedIn: PropTypes.func.isRequired,
 };
 

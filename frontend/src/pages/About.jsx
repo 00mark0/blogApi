@@ -7,11 +7,35 @@ const About = () => {
     <div className="flex flex-col min-h-screen p-4">
       <div className="flex-grow">
         <h2 className="text-2xl font-bold mb-6 text-center">About Me</h2>
-        <p className="text-center">
-          This is the about page. More content coming soon!
+        <p className="text-center md:w-1/4 mx-auto font-bold text-lg">
+          Hello! I&apos;m Marko Radojkovic, a passionate self-taught web
+          developer from Serbia. With a strong desire to learn and improve, I
+          have dedicated myself to mastering the art of web development. My
+          journey has been fueled by a love for creating useful applications
+          that can make a difference in people&apos;s lives.
+        </p>
+        <p className="text-center mt-4 md:w-1/4 mx-auto font-bold text-lg">
+          I am always on the lookout for exciting projects and collaborations
+          that can help me further develop my skills and make a positive impact.
+          Whether it&apos;s building innovative web applications or solving
+          complex problems, I am committed to delivering high-quality solutions
+          that meet the needs of users.
+        </p>
+        <p className="text-center mt-4 md:w-1/4 mx-auto font-bold text-lg">
+          In addition to my technical skills, I am also driven by a desire to
+          achieve financial independence through my work. I believe that by
+          combining my passion for web development with a strong work ethic, I
+          can create valuable products and services that not only benefit others
+          but also provide me with the means to support myself and my
+          aspirations.
+        </p>
+        <p className="text-center mt-4 md:w-1/4 mx-auto font-bold text-lg">
+          Thank you for taking the time to learn more about me. I look forward
+          to connecting with like-minded individuals and exploring new
+          opportunities in the world of web development.
         </p>
       </div>
-      <div className="flex flex-col justify-center items-center mt-4">
+      <div className="flex flex-col justify-center items-center mt-8">
         <div className="flex space-x-4 mb-4">
           <a
             href="https://github.com/00mark0"
