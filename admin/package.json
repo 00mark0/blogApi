@@ -11,11 +11,18 @@
   },
   "dependencies": {
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@tinymce/tinymce-react": "^5.1.1",
     "axios": "^1.7.7",
     "http-proxy-middleware": "^3.0.2",
+    "quill": "^2.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.26.2"
+    "react-quill": "^2.0.0",
+    "react-router-dom": "^6.26.2",
+    "slate": "^0.110.2",
+    "slate-history": "^0.109.0",
+    "slate-react": "^0.110.2",
+    "tinymce": "^7.4.1"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",

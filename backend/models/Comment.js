@@ -40,3 +40,18 @@ export const getCommentsByUserId = async (userId) => {
   );
   return result.rows;
 };
+
+export const deleteCommentsByArticleId = async (articleId) => {
+  await pool.query("DELETE FROM comments WHERE article_id = $1", [articleId]);
+};
+
+export const deleteLikesByArticleId = async (articleId) => {
+  await pool.query("DELETE FROM likes WHERE article_id = $1", [articleId]);
+};
+
+export const deleteLikesByCommentId = async (articleId) => {
+  await pool.query(
+    "DELETE FROM likes WHERE comment_id IN (SELECT id FROM comments WHERE article_id = $1)",
+    [articleId]
+  );
+};

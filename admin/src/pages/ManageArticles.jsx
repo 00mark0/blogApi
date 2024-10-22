@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
+import { Editor } from "@tinymce/tinymce-react";
+import "../App.css";
 
 const ManageArticles = () => {
   const [articles, setArticles] = useState([]);
-  const [newArticle, setNewArticle] = useState({ title: "", content: "" });
+  const [newArticle, setNewArticle] = useState({
+    title: "",
+    content: "",
+  });
   const [searchQuery, setSearchQuery] = useState("");
   const [editingArticleId, setEditingArticleId] = useState(null);
   const [expandedArticleId, setExpandedArticleId] = useState(null);
@@ -30,32 +35,49 @@ const ManageArticles = () => {
   const handleCreateOrUpdate = async (e) => {
     e.preventDefault();
     try {
+      const content = newArticle.content;
+
       if (editingArticleId) {
-        await axios.put(`/articles/${editingArticleId}`, newArticle, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        await axios.put(
+          `/articles/${editingArticleId}`,
+          { ...newArticle, content },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         setArticles(
           articles.map((article) =>
             article.id === editingArticleId
-              ? { ...article, ...newArticle }
+              ? { ...article, ...newArticle, content }
               : article
           )
         );
       } else {
-        const response = await axios.post("/articles", newArticle, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.post(
+          "/articles",
+          { ...newArticle, content },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         setArticles([...articles, response.data]);
       }
-      setNewArticle({ title: "", content: "" });
-      setEditingArticleId(null);
+      resetNewArticle();
     } catch (error) {
       console.error("Failed to create or update article", error);
     }
+  };
+
+  const resetNewArticle = () => {
+    setNewArticle({
+      title: "",
+      content: "",
+    });
+    setEditingArticleId(null);
   };
 
   const handleDelete = async (articleId) => {
@@ -78,7 +100,10 @@ const ManageArticles = () => {
   };
 
   const handleEdit = (article) => {
-    setNewArticle({ title: article.title, content: article.content });
+    setNewArticle({
+      title: article.title,
+      content: article.content,
+    });
     setEditingArticleId(article.id);
   };
 
@@ -121,14 +146,28 @@ const ManageArticles = () => {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Content</label>
-          <textarea
-            value={newArticle.content}
-            onChange={(e) =>
-              setNewArticle({ ...newArticle, content: e.target.value })
-            }
-            className="w-full px-3 py-2 border rounded"
-            required
-          />
+          <div className="border rounded p-2">
+            <Editor
+              apiKey="o0nctj6gidbeunx0288d2ejavo3n8kxe4xbug8bmf0p4t3nf" // Replace with your TinyMCE API key
+              value={newArticle.content}
+              onEditorChange={(content) =>
+                setNewArticle({ ...newArticle, content })
+              }
+              init={{
+                height: 300,
+                menubar: false,
+                plugins: [
+                  "advlist autolink lists link image charmap print preview anchor",
+                  "searchreplace visualblocks code fullscreen",
+                  "insertdatetime media table paste code help wordcount",
+                ],
+                toolbar:
+                  "undo redo | formatselect | bold italic backcolor | \
+                  alignleft aligncenter alignright alignjustify | \
+                  bullist numlist outdent indent | removeformat | help",
+              }}
+            />
+          </div>
         </div>
         <button
           type="submit"
@@ -140,18 +179,20 @@ const ManageArticles = () => {
       <table className="min-w-full bg-white">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b text-center">Title</th>
+            <th className="py-2 px-4 border-b text-start">Title</th>
             <th className="py-2 px-4 border-b text-center">Actions</th>
           </tr>
         </thead>
         <tbody>
           {filteredArticles.map((article) => (
             <tr key={article.id}>
-              <td className="py-2 px-4 border-b text-center">
+              <td className="py-2 px-4 border-b text-start">
                 {article.title}
                 {expandedArticleId === article.id && (
-                  <div className="mt-2 text-center">
-                    <p>{article.content}</p>
+                  <div className="mt-2 text-start">
+                    <div
+                      dangerouslySetInnerHTML={{ __html: article.content }}
+                    />
                     <p className="text-sm text-gray-600 mt-4">
                       Created At:{" "}
                       {new Date(article.created_at).toLocaleString()}

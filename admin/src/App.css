@@ -3,3 +3,12 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.tinymce-editor {
+  min-height: 150px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1.5;
+}

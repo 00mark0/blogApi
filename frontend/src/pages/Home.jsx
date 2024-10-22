@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import { Link } from "react-router-dom";
+import parse from "html-react-parser"; // Import html-react-parser
 
 const Home = () => {
   const [mostLikedArticles, setMostLikedArticles] = useState([]);
@@ -53,7 +54,7 @@ const Home = () => {
           >
             <h3 className="text-2xl font-semibold mb-2">{article.title}</h3>
             <p className="text-gray-600 mb-4">
-              {article.content.substring(0, 100)}...
+              {parse(article.content.substring(0, 100))}...
             </p>
             <div className="flex justify-between items-center text-gray-500">
               <span>👍 {article.like_count}</span>
@@ -73,7 +74,7 @@ const Home = () => {
           >
             <h3 className="text-2xl font-semibold mb-2">{article.title}</h3>
             <p className="text-gray-600 mb-4">
-              {article.content.substring(0, 100)}...
+              {parse(article.content.substring(0, 100))}...
             </p>
             <div className="flex justify-between items-center text-gray-500">
               <span>👍 {article.like_count}</span>

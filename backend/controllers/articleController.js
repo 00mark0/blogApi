@@ -5,7 +5,11 @@ import {
   updateArticle,
   deleteArticle,
 } from "../models/Article.js";
-import { deleteLikesByArticleId } from "../models/Like.js"; // Import the function to delete likes
+import {
+  deleteCommentsByArticleId,
+  deleteLikesByArticleId,
+  deleteLikesByCommentId,
+} from "../models/Comment.js";
 
 export const createNewArticle = async (req, res) => {
   const userId = req.user.id; // Get userId from JWT token
@@ -76,9 +80,16 @@ export const deleteExistingArticle = async (req, res) => {
       return res.status(404).json({ error: "Article not found" });
     }
 
-    // Delete related likes
+    // Delete related likes for comments
+    await deleteLikesByCommentId(id);
+
+    // Delete related comments
+    await deleteCommentsByArticleId(id);
+
+    // Delete related likes for the article
     await deleteLikesByArticleId(id);
 
+    // Delete the article
     await deleteArticle(id);
     res.status(204).send();
   } catch (error) {
