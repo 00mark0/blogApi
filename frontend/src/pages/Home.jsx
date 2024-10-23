@@ -53,9 +53,9 @@ const Home = () => {
             className="block p-6 border rounded-lg shadow-lg hover:bg-gray-100 hover:text-gray-950 transition duration-300"
           >
             <h3 className="text-2xl font-semibold mb-2">{article.title}</h3>
-            <p className="text-gray-600 mb-4">
+            <div className="text-gray-600 mb-4">
               {parse(article.content.substring(0, 100))}...
-            </p>
+            </div>
             <div className="flex justify-between items-center text-gray-500">
               <span>👍 {article.like_count}</span>
               <span>💬 {article.commentsCount}</span>
@@ -73,9 +73,9 @@ const Home = () => {
             className="block p-6 border rounded-lg shadow-lg hover:bg-gray-100 hover:text-gray-950 transition duration-300"
           >
             <h3 className="text-2xl font-semibold mb-2">{article.title}</h3>
-            <p className="text-gray-600 mb-4">
+            <div className="text-gray-600 mb-4">
               {parse(article.content.substring(0, 100))}...
-            </p>
+            </div>
             <div className="flex justify-between items-center text-gray-500">
               <span>👍 {article.like_count}</span>
               <span>💬 {article.commentsCount}</span>

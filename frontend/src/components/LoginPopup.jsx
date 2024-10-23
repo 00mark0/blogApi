@@ -6,8 +6,10 @@ const LoginPopup = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-4 rounded shadow-lg">
-        <h2 className="text-xl font-bold mb-4">You need to be logged in</h2>
-        <p className="mb-4">Please log in to like or comment.</p>
+        <h2 className="text-xl font-bold mb-4 text-gray-800">
+          You need to be logged in
+        </h2>
+        <p className="mb-4 text-gray-800">Please log in to like or comment.</p>
         <div className="flex justify-between">
           <Link
             to="/login"

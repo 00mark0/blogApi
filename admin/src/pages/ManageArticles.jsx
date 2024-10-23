@@ -148,7 +148,7 @@ const ManageArticles = () => {
           <label className="block text-gray-700">Content</label>
           <div className="border rounded p-2">
             <Editor
-              apiKey="o0nctj6gidbeunx0288d2ejavo3n8kxe4xbug8bmf0p4t3nf" // Replace with your TinyMCE API key
+              apiKey="o0nctj6gidbeunx0288d2ejavo3n8kxe4xbug8bmf0p4t3nf"
               value={newArticle.content}
               onEditorChange={(content) =>
                 setNewArticle({ ...newArticle, content })
@@ -157,9 +157,24 @@ const ManageArticles = () => {
                 height: 300,
                 menubar: false,
                 plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table paste code help wordcount",
+                  "advlist",
+                  "autolink",
+                  "lists",
+                  "link",
+                  "image",
+                  "charmap",
+                  "preview",
+                  "anchor",
+                  "searchreplace",
+                  "visualblocks",
+                  "code",
+                  "fullscreen",
+                  "insertdatetime",
+                  "media",
+                  "table",
+                  "code",
+                  "help",
+                  "wordcount",
                 ],
                 toolbar:
                   "undo redo | formatselect | bold italic backcolor | \

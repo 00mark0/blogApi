@@ -220,7 +220,7 @@ const ArticlePage = ({ isLoggedIn, setShowLoginPopup }) => {
           <h2 className="text-3xl font-bold mb-6 text-start">
             {article.title}
           </h2>
-          <div className="mb-4 text-start text-lg">
+          <div className="mb-4 text-start w-full text-lg">
             {parse(article.content)}
           </div>
           <p className="text-sm text-gray-400 mb-4 text-center">
@@ -307,14 +307,14 @@ const ArticlePage = ({ isLoggedIn, setShowLoginPopup }) => {
                   </button>
                   {String(comment.user_id) ===
                     localStorage.getItem("userId") && (
-                    <div className="relative">
+                    <div className="absolute top-5 right-5">
                       <button
                         onClick={() =>
                           setShowMenu(
                             showMenu === comment.id ? null : comment.id
                           )
                         }
-                        className="absolute top-0 right-0 text-gray-800 hover:text-gray-400 transition ease duration-200 rounded"
+                        className="text-gray-800 hover:text-gray-400 transition ease duration-200 rounded"
                       >
                         <FontAwesomeIcon icon={faEllipsisV} size="lg" />
                       </button>
