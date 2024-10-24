@@ -39,18 +39,18 @@ Replace `<your-jwt-secret>`, `<your-email>`, and `<your-email-password>` with yo
 
 ## Getting Started
 
-0. **Initialize the database**
+0. **Fork and clone the repository**:
+
+   ```sh
+   git clone <repository-url>
+   ```
+
+1. **Initialize the database**
 
    Run the script from backend/scripts/initDb.js
 
    ```sh
    node initDb.js
-   ```
-
-1. **Fork and clone the repository**:
-
-   ```sh
-   git clone <repository-url>
    ```
 
 2. **Navigate to the backend directory**:
