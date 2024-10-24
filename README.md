@@ -33,7 +33,6 @@ PORT=3000
 JWT_SECRET=<your-jwt-secret>
 EMAIL=<your-email>
 EMAIL_PASSWORD=<your-email-password>
-FRONTEND_URL=http://localhost:3000  # Update this to your production frontend URL when deploying
 ```
 
 Replace `<your-jwt-secret>`, `<your-email>`, and `<your-email-password>` with your actual credentials.
@@ -58,16 +57,9 @@ Replace `<your-jwt-secret>`, `<your-email>`, and `<your-email-password>` with yo
    npm install
    ```
 
-4. \*\*Set up the
+4. **Set up the .env file**:
 
-.env
-
-file\*\*:
-Create a
-
-.env
-
-file in the backend directory and add the required environment variables as described above.
+Create a .env file in the backend directory and add the required environment variables as described above.
 
 5.  **Run the server**:
 
