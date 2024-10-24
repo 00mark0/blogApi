@@ -27,49 +27,8 @@ To run the server, you need to set up the following environment variables in a
 
 file in the backend folder:
 
-DATABASE_URL=postgresql://<username>:<password>@localhost:5432/blog
-PORT=3000
-JWT_SECRET=<your-jwt-secret>
-EMAIL=<your-email>
-EMAIL_PASSWORD=<your-email-password>
-
-Replace `<your-jwt-secret>`, `<your-email>`, and `<your-email-password>` with your actual credentials.
-
-# Blog API Project
-
-## Description
-
-This project is a full-stack blog application that includes an admin panel for managing users, articles, and comments, as well as a frontend for displaying and interacting with blog content. The application is built with a modern tech stack and provides a comprehensive set of features for both administrators and regular users.
-
-## Features
-
-### Admin Panel (Admin Folder)
-
-- **User Management**: Create, read, update, and delete (CRUD) operations for users.
-- **Article Management**: CRUD operations for articles.
-- **Comment Management**: CRUD operations for comments.
-
-### Frontend (Frontend Folder)
-
-- **Home Page**: Displays the most liked and most recent articles.
-- **Articles Page**: Allows users to search articles by title, ID, or date created.
-- **Article Page**: View articles, comment on articles, like articles, and like comments.
-- **Profile Page**: Manage user information, change password, delete account, and manage user comments.
-
-## .env Requirements (Backend Folder)
-
-To run the server, you need to set up the following environment variables in a
-
-.env
-
-file in the backend folder:
-
 ```properties
-DATABASE_URL=postgresql://<username>:<password>@localhost:
-
-543
-
-2/blog
+DATABASE_URL=postgresql://<username>:<password>@localhost:5432/blog
 PORT=3000
 JWT_SECRET=<your-jwt-secret>
 EMAIL=<your-email>
