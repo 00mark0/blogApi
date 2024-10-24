@@ -1,4 +1,5 @@
 |-- admin
+    |-- .env
     |-- .eslintrc.cjs
     |-- .gitignore
     |-- index.html

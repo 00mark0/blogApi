@@ -37,8 +37,10 @@ const ManageArticles = () => {
     try {
       const content = newArticle.content;
 
+      console.log("Sending data:", { ...newArticle, content });
+
       if (editingArticleId) {
-        await axios.put(
+        const response = await axios.put(
           `/articles/${editingArticleId}`,
           { ...newArticle, content },
           {
@@ -47,6 +49,7 @@ const ManageArticles = () => {
             },
           }
         );
+        console.log("Update response:", response.data);
         setArticles(
           articles.map((article) =>
             article.id === editingArticleId
@@ -64,11 +67,15 @@ const ManageArticles = () => {
             },
           }
         );
+        console.log("Create response:", response.data);
         setArticles([...articles, response.data]);
       }
       resetNewArticle();
     } catch (error) {
       console.error("Failed to create or update article", error);
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+      }
     }
   };
 
@@ -148,38 +155,39 @@ const ManageArticles = () => {
           <label className="block text-gray-700">Content</label>
           <div className="border rounded p-2">
             <Editor
-              apiKey="o0nctj6gidbeunx0288d2ejavo3n8kxe4xbug8bmf0p4t3nf"
+              apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
               value={newArticle.content}
               onEditorChange={(content) =>
                 setNewArticle({ ...newArticle, content })
               }
               init={{
-                height: 300,
-                menubar: false,
                 plugins: [
-                  "advlist",
-                  "autolink",
-                  "lists",
-                  "link",
-                  "image",
-                  "charmap",
-                  "preview",
                   "anchor",
-                  "searchreplace",
-                  "visualblocks",
-                  "code",
-                  "fullscreen",
-                  "insertdatetime",
+                  "autolink",
+                  "charmap",
+                  "codesample",
+                  "emoticons",
+                  "image",
+                  "link",
+                  "lists",
                   "media",
+                  "searchreplace",
                   "table",
-                  "code",
-                  "help",
+                  "visualblocks",
                   "wordcount",
                 ],
                 toolbar:
-                  "undo redo | formatselect | bold italic backcolor | \
-                  alignleft aligncenter alignright alignjustify | \
-                  bullist numlist outdent indent | removeformat | help",
+                  "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
+                tinycomments_mode: "embedded",
+                tinycomments_author: "Author name",
+                mergetags_list: [
+                  { value: "First.Name", title: "First Name" },
+                  { value: "Email", title: "Email" },
+                ],
+                ai_request: (request, respondWith) =>
+                  respondWith.string(() =>
+                    Promise.reject("See docs to implement AI Assistant")
+                  ),
               }}
             />
           </div>

@@ -23,7 +23,8 @@
     "react-router-dom": "^6.26.2",
     "slate": "^0.110.2",
     "slate-history": "^0.109.0",
-    "slate-react": "^0.110.2"
+    "slate-react": "^0.110.2",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
